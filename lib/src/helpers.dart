@@ -1,21 +1,19 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
- * Copyright (C) 2012, Kai Sellgren
+ * Copyright (C) 2014, Daniel V
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-part of animation;
+part of compatible_animation;
 
-/**
- * Performs an animation on the given [element] with the given [properties].
- *
- * You may specify a [duration] in milliseconds.
- *
- * By default, linear interpolation is used, but you may specify another [easingType] method to use.
- */
-Animation animate(Element element, {int duration, Easing easing, Map<String, Object> properties, bool paused}) {
+/// Performs an animation on the given [element] with the given [properties].
+///
+/// You may specify a [duration] in milliseconds.
+///
+/// By default, linear interpolation is used, but you may specify another [easingType] method to use.
+CompatibleAnimation animate(Element element, {int duration, Easing easing, Map<String, Object> properties, bool paused}) {
   assert(element != null);
   final animation = new ElementAnimation(element);
 

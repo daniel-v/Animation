@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_enhanced_config.dart';
 
-import 'package:animation/animation.dart';
+import 'package:animation/compatible_animation.dart';
 
 main() {
   useHtmlEnhancedConfiguration();

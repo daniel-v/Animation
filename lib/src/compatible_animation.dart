@@ -1,26 +1,22 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
- * Copyright (C) 2012, Kai Sellgren
+ * Copyright (C) 2014, Daniel V
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-part of animation;
+part of compatible_animation;
 
-typedef void StepCallback(Animation anim, double percentage);
+typedef void StepCallback(CompatibleAnimation anim, double percentage);
 
-abstract class Animation {
+abstract class CompatibleAnimation {
   int _duration = 500;
 
-  /**
-   * Returns the duration of this animation in milliseconds.
-   */
+  /// Returns the duration of this animation in milliseconds.
   int get duration => _duration;
 
-  /**
-   * Sets the duration for this animation in milliseconds
-   */
+  /// Sets the duration for this animation in milliseconds
   set duration(int value) {
     _duration = value;
   }
@@ -37,29 +33,23 @@ abstract class Animation {
   Stream get onStep => _onStepController.stream;
   Stream get onComplete => _onCompleteController.stream;
 
-  Animation() {}
+  CompatibleAnimation() {}
 
-  /**
-   * Pauses the animation.
-   */
+  /// Pauses the animation.
   pause() {
     _paused = true;
     _pausedAt = _getNowMilliseconds();
   }
 
-  /**
-   * Pauses the animation for the given [duration], and then resumes.
-   *
-   * [duration] is in milliseconds.
-   */
+  /// Pauses the animation for the given [duration], and then resumes.
+  ///
+  /// [duration] is in milliseconds.
   pauseFor(int duration) {
     pause();
     new Timer(new Duration(milliseconds: duration), run);
   }
 
-  /**
-   * Stops the animation and resets it to the beginning state.
-   */
+  /// Stops the animation and resets it to the beginning state.
   stop() {
     _paused = false;
     _pausedAt = 0;
@@ -68,39 +58,31 @@ abstract class Animation {
     _stopped = true;
   }
 
-  /**
-   * Completes the animation by setting it to the final state.
-   */
+  /// Completes the animation by setting it to the final state.
   finish() {
     throw new UnsupportedError('');
   }
 
-  /**
-   * Resets the animation to the initial state, but does not stop the animation.
-   */
+  /// Resets the animation to the initial state, but does not stop the animation.
   reset() {
     throw new UnsupportedError('');
   }
 
-  /**
-   * Fowards the animation by the given [duration].
-   *
-   * [duration] is in milliseconds.
-   *
-   * If the current state forwarded by duration exceeds the total duration of the animation,
-   * the animation will simply finish and be set to the final state.
-   */
+  /// Fowards the animation by the given [duration].
+  ///
+  /// [duration] is in milliseconds.
+  ///
+  /// If the current state forwarded by duration exceeds the total duration of the animation,
+  /// the animation will simply finish and be set to the final state.
   forward(int duration) {
     throw new UnsupportedError('');
   }
 
-  /**
-   * Delays the animation by [duration].
-   *
-   * This means that the animation takes longer.
-   *
-   * [duration] is in milliseconds.
-   */
+  /// Delays the animation by [duration].
+  ///
+  /// This means that the animation takes longer.
+  ///
+  /// [duration] is in milliseconds.
   delay(int duration) {
     throw new UnsupportedError('');
 
@@ -108,22 +90,16 @@ abstract class Animation {
     _startTime -= duration * 2;
   }
 
-  /**
-   * Runs the animation. If the animation was paused before, it will be resumed.
-   */
+  /// Runs the animation. If the animation was paused before, it will be resumed.
   run() {
     _paused = false;
     _stopped = false;
   }
 
-  /**
-   * Resumes a paused animation.
-   */
+  /// Resumes a paused animation.
   resume() => run();
 
-  /**
-   * Performs easing for the given values using the chosen easing type.
-   */
+  /// Performs easing for the given values using the chosen easing type.
   _performEasing(time, duration, change, baseValue) {
     switch (easing) {
       case Easing.LINEAR:

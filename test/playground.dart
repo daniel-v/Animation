@@ -1,13 +1,13 @@
 import 'dart:html';
 import 'dart:async';
 
-import 'package:animation/animation.dart';
+import 'package:animation/compatible_animation.dart';
 import 'package:animation/effect.dart';
 
 // This file is used to play around with the Animation lib to test things manually.
 
 main() {
-  var el = query('#box');
+  var el = querySelector('#box');
 
   //animate(el, properties: {'left': '50px'});
 

@@ -1,37 +1,27 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
- * Copyright (C) 2012, Kai Sellgren
+ * Copyright (C) 2014, Daniel V
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-part of animation;
+part of compatible_animation;
 
-/**
- * [ElementAnimation] is used to animate HTMLElement styles (such as left, width) and properties (such as scrollTop).
- */
-class ElementAnimation extends Animation {
+/// [ElementAnimation] is used to animate HTMLElement styles (such as left, width) and properties (such as scrollTop).
+class ElementAnimation extends CompatibleAnimation {
   static final RegExp valueUnitRegex = new RegExp(r'^(-?[0-9\.]+)([a-zA-Z%]+)$');
 
-  /**
-   * These are our target properties where we should end up in if all goes well.
-   */
+  /// These are our target properties where we should end up in if all goes well.
   Map<String, Object> toProperties = {};
 
-  /**
-   * A map of properties that represent the initial state of the element (beginning values).
-   */
+  /// A map of properties that represent the initial state of the element (beginning values).
   final Map<String, Object> fromProperties = {};
 
-  /**
-   * This map stores the current properties our element has during the process of animation. These change all the time.
-   */
+  /// This map stores the current properties our element has during the process of animation. These change all the time.
   final Map<String, Object> currentProperties = {};
 
-  /**
-   * We need to keep track of what units are being used for properties (e.g. width could be px or em).
-   */
+  /// We need to keep track of what units are being used for properties (e.g. width could be px or em).
   final Map<String, String> units = {};
 
   final Element element;
@@ -42,11 +32,9 @@ class ElementAnimation extends Animation {
 
   set properties(value) => toProperties = value;
 
-  /**
-   * Calculates the current style and sets [fromProperties].
-   *
-   * This should be called just before the animation starts.
-   */
+  /// Calculates the current style and sets [fromProperties].
+  ///
+  /// This should be called just before the animation starts.
   _initializeFromProperties() {
     if (_isInitialized) throw 'Unexpected scenario: element properties should not be initialized more than once.';
 
@@ -64,12 +52,14 @@ class ElementAnimation extends Animation {
 
       // We could not convert "auto" in this particular case.
       if (cssValue == 'auto') {
-        throw 'Cannot animate property "$key", because it had initial value of "auto", which is not supported for this type of property. Please specify an initial value before you start animating it.';
+        throw
+            'Cannot animate property "$key", because it had initial value of "auto", which is not supported for this type of property. Please specify an initial value before you start animating it.';
       }
 
       // Empty value.
       if (cssValue == '') {
-        throw 'Cannot animate property "$key", because the initial value was an empty string "". Please specify an initial value.';
+        throw
+            'Cannot animate property "$key", because the initial value was an empty string "". Please specify an initial value.';
       }
 
       // Example properties needing a unit: width, height, top, etc.
@@ -100,9 +90,7 @@ class ElementAnimation extends Animation {
             units[key] = 'px'; // Default unit "px" if user did not specify anything.
           }
         }
-      }
-
-      // Example properties not needing a unit: opacity
+      } // Example properties not needing a unit: opacity
       else {
         fromProperties[key] = double.parse(cssValue);
         currentProperties[key] = double.parse(cssValue);
@@ -166,9 +154,7 @@ class ElementAnimation extends Animation {
     super.run();
   }
 
-  /**
-   * Advances the animation by one step.
-   */
+  /// Advances the animation by one step.
   _advance(num highResTime) {
     if (_paused || _stopped) return;
 
@@ -202,24 +188,20 @@ class ElementAnimation extends Animation {
 
       // If there's still time left, calculate the exact figures.
       if (timeLeft > 0) {
-        var baseValue = fromProperties[key];      // The base/original value.
-        var change    = value - baseValue;        // How much the values differ.
-        var time      = currentTime - _startTime; // How much time has passed.
+        var baseValue = fromProperties[key]; // The base/original value.
+        var change = value - baseValue; // How much the values differ.
+        var time = currentTime - _startTime; // How much time has passed.
 
         // Calculate the eased value.
         intermediateValue = super._performEasing(time, duration, change, baseValue);
 
         // Clamps the intermediate value to be within value's range. i.e. to ensure we never exceed limits.
         if (baseValue > value) {
-          if (value > 0 && intermediateValue < value)
-            intermediateValue = value;
-          if (value < 0 && intermediateValue < value)
-            intermediateValue = value;
+          if (value > 0 && intermediateValue < value) intermediateValue = value;
+          if (value < 0 && intermediateValue < value) intermediateValue = value;
         } else {
-          if (value > 0 && intermediateValue > value)
-            intermediateValue = value;
-          if (value < 0 && intermediateValue > value)
-            intermediateValue = value;
+          if (value > 0 && intermediateValue > value) intermediateValue = value;
+          if (value < 0 && intermediateValue > value) intermediateValue = value;
         }
       } else {
         // If no time left, jump to the final value.
@@ -245,20 +227,16 @@ class ElementAnimation extends Animation {
     }
   }
 
-  /**
-   * Returns true if the given property requires a unit.
-    *
-    * Example: for width, returns true, but for opacity, returns false.
-   */
+  /// Returns true if the given property requires a unit.
+  ///
+  /// Example: for width, returns true, but for opacity, returns false.
   bool _doesPropertyNeedUnit(String propertyName) {
     var el = new DivElement();
     el.style.setProperty(propertyName, '0px');
     return el.style.getPropertyValue(propertyName) == '0px';
   }
 
-  /**
-   * We try to convert "auto" value to the actual value.
-   */
+  /// We try to convert "auto" value to the actual value.
   String _getActualValueForAuto(String propertyName) {
     convert() {
       switch (propertyName) {
@@ -286,11 +264,9 @@ class ElementAnimation extends Animation {
     return 'auto';
   }
 
-  /**
-   * Returns true if the property requires animation with decimal precision.
-   *
-   * Properties like 'opacity' needs to animate precisely, but e.g. width should not.
-   */
+  /// Returns true if the property requires animation with decimal precision.
+  ///
+  /// Properties like 'opacity' needs to animate precisely, but e.g. width should not.
   bool _propertyNeedsPreciseAnimation(String propertyName) {
     switch (propertyName) {
       case 'opacity':
@@ -300,18 +276,14 @@ class ElementAnimation extends Animation {
     return false;
   }
 
-  /**
-   * Returns true if the given property is not a CSS property, but is an animatable element property.
-   */
+  /// Returns true if the given property is not a CSS property, but is an animatable element property.
   bool _isAnimatableElementProperty(String propertyName) {
     const props = const ['scrollTop', 'scrollLeft'];
 
     return props.contains(propertyName);
   }
 
-  /**
-   * Sets a property value such as scrollTop.
-   */
+  /// Sets a property value such as scrollTop.
   void _setPropertyValue(String propertyName, value) {
     // TODO: Use mirrors when they land in dart2js?
     switch (propertyName) {

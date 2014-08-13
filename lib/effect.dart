@@ -1,7 +1,7 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
- * Copyright (C) 2012, Kai Sellgren
+ * Copyright (C) 2014, Daniel V
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
@@ -9,12 +9,8 @@
 library effect;
 
 import 'dart:html';
-import 'dart:math';
-import 'dart:isolate';
-import 'dart:async';
-import 'dart:collection';
 
-import 'animation.dart';
+import 'compatible_animation.dart';
 
 part 'src/effect/slide.dart';
 

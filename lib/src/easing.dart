@@ -1,12 +1,12 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
- * Copyright (C) 2012, Kai Sellgren
+ * Copyright (C) 2014, Daniel V
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-part of animation;
+part of compatible_animation;
 
 class Easing {
   static const LINEAR = const Easing._(0);

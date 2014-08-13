@@ -1,12 +1,12 @@
 /*!
- * Animation
+ * CompatibleAnimation
  *
  * Copyright (C) 2012, Kai Sellgren
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-part of animation;
+part of compatible_animation;
 
 class AnimationQueue {
   int _position = 0;
@@ -16,39 +16,29 @@ class AnimationQueue {
 
   bool _isListeningToComplete = false;
 
-  /**
-   * Returns the current "position" -- the nth animation that is taking place.
-   */
+  /// Returns the current "position" -- the nth animation that is taking place.
   int get position => _position;
 
-  List<Animation> _queue = [];
+  List<CompatibleAnimation> _queue = [];
 
-  /**
-   * Returns the number of animations remaining in the queue.
-   *
-   * This includes the currently running animation.
-   */
+  /// Returns the number of animations remaining in the queue.
+  ///
+  /// This includes the currently running animation.
   int get remaining => _queue.length - _position;
 
-  /**
-   * Adds the given animation to the queue.
-   */
-  add(Animation animation) {
+  /// Adds the given animation to the queue.
+  add(CompatibleAnimation animation) {
     _queue.add(animation);
   }
 
-  /**
-   * Adds every animation in the collection to the queue.
-   */
+  /// Adds every animation in the collection to the queue.
   addAll(List animations) {
     animations.forEach((animation) => _queue.add(animation));
   }
 
-  /**
-   * Clears the queue.
-   *
-   * If there's an animation occurring, it will complete.
-   */
+  /// Clears the queue.
+  ///
+  /// If there's an animation occurring, it will complete.
   clear() {
     _queue.clear();
     _position = 0;
@@ -66,10 +56,8 @@ class AnimationQueue {
     throw new UnsupportedError('');
   }
 
-  /**
-   * Removes the given animation from the queue.
-   */
-  remove(Animation animation) {
+  /// Removes the given animation from the queue.
+  remove(CompatibleAnimation animation) {
     var position = -1;
 
     // Determine the position of [animation] within the queue.
@@ -84,25 +72,19 @@ class AnimationQueue {
       _queue.removeAt(position);
   }
 
-  /**
-   * Removes the animation at the given index.
-   */
+  /// Removes the animation at the given index.
   removeAt(int index) {
     _queue.removeAt(index);
   }
 
-  /**
-   * Directly jumps to the nth animation in the queue.
-   *
-   * If there is currently an animation running, it will complete before this.
-   */
+  /// Directly jumps to the nth animation in the queue.
+  ///
+  /// If there is currently an animation running, it will complete before this.
   jump(int position) {
     _position = position;
   }
 
-  /**
-   * Runs the queue of animations.
-   */
+  /// Runs the queue of animations.
   run() {
     if (_position >= _queue.length) {
       // TODO: Fire an event.
@@ -114,11 +96,11 @@ class AnimationQueue {
         run();
       }
     } else {
-      Animation anim = _queue[_position];
+      CompatibleAnimation anim = _queue[_position];
       anim.stop();
 
       // TODO: There must be a better way to do this.
-      if (_isListeningToComplete == false) {        
+      if (_isListeningToComplete == false) {
         _isListeningToComplete = (_position == (_queue.length - 1));
         anim.onComplete.listen((data) {
           _position++;
@@ -131,9 +113,7 @@ class AnimationQueue {
     }
   }
 
-  /**
-   * A helper method which runs the next animation after the interval.
-   */
+  /// A helper method which runs the next animation after the interval.
   _runAfterInterval() {
     if (interval > 0) {
       new Timer(new Duration(milliseconds:interval), run);

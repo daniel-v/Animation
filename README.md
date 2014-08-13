@@ -3,6 +3,11 @@ Animation
 
 Animate elements on a web page with Dart. Similar to jQuery's `animate()`.
 
+This is a forked version of Kai Sellgren original Animation library. As for versioning goes, I will continue where
+has left off the work.
+
+Kai Sellgren, thank you for your work!
+
 ## Features
 
 * Simple and quick animations via the simple `animate()` function.
@@ -18,6 +23,14 @@ Animate elements on a web page with Dart. Similar to jQuery's `animate()`.
 * Different easing options available (easy-in, ease-out, ease-in-out, linear) and with different algorithms (quadratic, sine, etc.).
 
 ## Changelog
+
+#####v0.5.24
+- Library namespace has been ranamed from `animation` to `compatible_animation` to resolve the namespace issues that it has caused with
+other libraries including the hiding of Dart's own Animation class.
+- Browser dependency has been upgraded to `any` to resolve conflict with other libraries (in my case it was AngularDart)
+- Removed several warnings from code (mostly unused imports)
+- Converted JSDoc style doc-comments to Dart doccoments
+- There has not been any functionality improvements or modifications, all other docs should be relevant to this version of the library.
 
 #####Breaking changes with v0.5.20
 - Renamed StyleAnimation to ElementAnimation. Reason: we now also animate non-styles such as scrollTop. The class was always HTMLElement-specific so the new name makes sense.
@@ -43,7 +56,7 @@ The simplest way to animate elements is to use the top-level helper function `an
 
 ```dart
 import 'dart:html';
-import 'package:animation/animation.dart');
+import 'package:animation/compatible_animation.dart');
 
 main() {
   var el = query('#box');
@@ -64,7 +77,7 @@ The following example will not run the animation directly, instead the animation
 
 ```dart
 import 'dart:html';
-import 'package:animation/animation.dart');
+import 'package:animation/compatible_animation.dart');
 
 main() {
   var el = query('#box');
@@ -87,7 +100,7 @@ You may manipulate animations in a few ways. In this example we will run an anim
 
 ```dart
 import 'dart:html';
-import 'package:animation/animation.dart');
+import 'package:animation/compatible_animation.dart');
 
 main() {
   var el = query('#box');
@@ -116,7 +129,7 @@ The previous code could also be written using the `animate()` function if you wi
 
 ```dart
 import 'dart:html';
-import 'package:animation/animation.dart');
+import 'package:animation/compatible_animation.dart');
 
 main() {
   var el = query('#box');
@@ -145,7 +158,7 @@ Sometimes you want to queue up a few animations. This can be done easily:
 
 ```dart
 import 'dart:html';
-import 'package:animation/animation.dart');
+import 'package:animation/compatible_animation.dart');
 
 main() {
   var el = query('#box');
